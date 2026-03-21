@@ -13,7 +13,7 @@ function GameLogs() {
   const { data, isPending, error } = useQuery<GameLog[]>({
     queryKey: ["games"],
     queryFn: () =>
-      fetch("http://localhost:3000/games").then((res) => res.json()),
+      fetch(`${import.meta.env.VITE_API_URL}/games`).then((res) => res.json()),
   });
 
   const uniqueGameTypes = Array.from(new Set(data?.map((game) => game.type)));
