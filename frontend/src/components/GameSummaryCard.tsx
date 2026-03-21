@@ -25,7 +25,7 @@ export const GameSummaryCard = ({
         <div
           className={`px-3 py-1 rounded-full text-[11px] font-bold ${theme}`}
         >
-          {game.type}
+          {game.type.toUpperCase()}
         </div>
       </div>
       <div className="space-y-4">
@@ -39,12 +39,15 @@ export const GameSummaryCard = ({
                 key={index}
                 className={`w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold ${getRandomPlayerColor()}`}
               >
-                {getInitials(player)}
+                {getInitials(player.name)}
               </div>
             ))}
           </div>
           <span className="text-xs font-semibold text-on-surface-variant">
-            {game.players.slice(0, 2).join(", ")}
+            {game.players
+              .slice(0, 2)
+              .map((player) => player.name)
+              .join(", ")}
             {game.players.length > 2 && ` +${game.players.length - 2}`}
           </span>
         </div>
