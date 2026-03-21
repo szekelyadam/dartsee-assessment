@@ -65,12 +65,34 @@ describe('GamesService', () => {
   });
 
   describe('findAll', () => {
-    it('should call repository.find and return the array of games', async () => {
-      const games = [{ id: 1, type: 'Test Game' }];
-      repositoryMock.find?.mockReturnValue(games);
+    it('should query the database using queryBuilder and return the array of games with players', async () => {
+      const qb: any = repositoryMock.createQueryBuilder!();
+      qb.getRawMany.mockResolvedValue([
+        {
+          game_id: 1,
+          game_type: 'Test Game',
+          player_id: 'p1',
+          player_name: 'Alice',
+        },
+        {
+          game_id: 1,
+          game_type: 'Test Game',
+          player_id: 'p2',
+          player_name: 'Bob',
+        },
+      ]);
 
-      expect(await service.findAll()).toEqual(games);
-      expect(repositoryMock.find).toHaveBeenCalled();
+      const result = await service.findAll();
+      expect(result).toEqual([
+        {
+          id: 1,
+          type: 'Test Game',
+          players: [
+            { id: 'p1', name: 'Alice' },
+            { id: 'p2', name: 'Bob' },
+          ],
+        },
+      ]);
     });
   });
 

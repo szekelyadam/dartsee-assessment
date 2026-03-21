@@ -20,7 +20,39 @@ export class GamesService {
   ) {}
 
   async findAll(): Promise<Game[]> {
-    return this.gamesRepository.find();
+    const rawData = await this.gamesRepository
+      .createQueryBuilder('game')
+      .leftJoin(GamePlayer, 'gp', 'gp.game_id = game.id')
+      .leftJoin(Player, 'p', 'p.id = gp.player_id')
+      .select([
+        'game.id AS game_id',
+        'game.type AS game_type',
+        'p.id AS player_id',
+        'p.name AS player_name',
+      ])
+      .getRawMany();
+
+    const gamesMap = new Map<string, any>();
+    for (const row of rawData) {
+      if (!gamesMap.has(row.game_id)) {
+        gamesMap.set(row.game_id, {
+          id: row.game_id,
+          type: row.game_type,
+          players: [],
+        });
+      }
+      if (
+        row.player_id &&
+        !gamesMap.get(row.game_id).players.find((p) => p.id === row.player_id)
+      ) {
+        gamesMap.get(row.game_id).players.push({
+          id: row.player_id,
+          name: row.player_name,
+        });
+      }
+    }
+
+    return Array.from(gamesMap.values());
   }
 
   async getPopularity() {
