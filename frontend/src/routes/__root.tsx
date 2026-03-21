@@ -5,7 +5,7 @@ import { Header } from "../components/Header";
 const RootLayout = () => (
   <>
     <Header />
-    <main className="lg:ml-64 pt-24 pb-12 px-6 md:px-12">
+    <main className="pt-24 pb-12 px-6 md:px-12">
       <Outlet />
     </main>
     <TanStackRouterDevtools />
