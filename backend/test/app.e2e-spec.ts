@@ -22,4 +22,13 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  it('/games (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/games')
+      .expect(200)
+      .expect((res) => {
+        expect(Array.isArray(res.body)).toBe(true);
+      });
+  });
 });

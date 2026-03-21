@@ -6,6 +6,7 @@ import { Game } from './games/game.entity';
 import { Player } from './players/player.entity';
 import { GamePlayer } from './game-players/game-player.entity';
 import { Throw } from './throws/throw.entity';
+import { GamesModule } from './games/games.module';
 import * as path from 'path';
 
 @Module({
@@ -16,6 +17,7 @@ import * as path from 'path';
       entities: [Game, Player, GamePlayer, Throw],
       synchronize: false,
     }),
+    GamesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
