@@ -31,4 +31,19 @@ describe('AppController (e2e)', () => {
         expect(Array.isArray(res.body)).toBe(true);
       });
   });
+
+  it('/games/:id (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/games/1')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toHaveProperty('id', 1);
+        expect(res.body).toHaveProperty('players');
+        expect(Array.isArray(res.body.players)).toBe(true);
+        if (res.body.players.length > 0) {
+          expect(res.body.players[0]).toHaveProperty('averageScorePerRound');
+          expect(res.body.players[0]).toHaveProperty('missCount');
+        }
+      });
+  });
 });

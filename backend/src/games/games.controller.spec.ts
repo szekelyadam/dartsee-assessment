@@ -8,6 +8,7 @@ describe('GamesController', () => {
 
   const mockGamesService = {
     findAll: jest.fn(),
+    findOne: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -36,6 +37,16 @@ describe('GamesController', () => {
 
       expect(await controller.findAll()).toEqual(games);
       expect(service.findAll).toHaveBeenCalled();
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return a single game', async () => {
+      const result = { id: 1, type: 'Test Game', players: [] };
+      jest.spyOn(service, 'findOne').mockResolvedValue(result as any);
+
+      expect(await controller.findOne(1)).toEqual(result);
+      expect(service.findOne).toHaveBeenCalledWith(1);
     });
   });
 });
