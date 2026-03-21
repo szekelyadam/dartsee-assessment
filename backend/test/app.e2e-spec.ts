@@ -32,6 +32,20 @@ describe('AppController (e2e)', () => {
       });
   });
 
+  it('/games/popularity (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/games/popularity')
+      .expect(200)
+      .expect((res) => {
+        expect(Array.isArray(res.body)).toBe(true);
+        if (res.body.length > 0) {
+          expect(res.body[0]).toHaveProperty('type');
+          expect(res.body[0]).toHaveProperty('count');
+          expect(typeof res.body[0].count).toBe('number');
+        }
+      });
+  });
+
   it('/games/:id (GET)', () => {
     return request(app.getHttpServer())
       .get('/games/1')

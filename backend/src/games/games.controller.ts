@@ -11,6 +11,11 @@ export class GamesController {
     return this.gamesService.findAll();
   }
 
+  @Get('popularity')
+  getPopularity() {
+    return this.gamesService.getPopularity();
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.gamesService.findOne(id);

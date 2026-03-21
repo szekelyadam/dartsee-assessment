@@ -9,6 +9,7 @@ describe('GamesController', () => {
   const mockGamesService = {
     findAll: jest.fn(),
     findOne: jest.fn(),
+    getPopularity: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -47,6 +48,16 @@ describe('GamesController', () => {
 
       expect(await controller.findOne(1)).toEqual(result);
       expect(service.findOne).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('getPopularity', () => {
+    it('should return game types and counts', async () => {
+      const result = [{ type: '501', count: 10 }];
+      mockGamesService.getPopularity.mockResolvedValue(result);
+
+      expect(await controller.getPopularity()).toEqual(result);
+      expect(service.getPopularity).toHaveBeenCalled();
     });
   });
 });

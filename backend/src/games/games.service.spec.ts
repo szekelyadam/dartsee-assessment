@@ -17,6 +17,7 @@ export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
       leftJoin: jest.fn().mockReturnThis(),
       where: jest.fn().mockReturnThis(),
       orderBy: jest.fn().mockReturnThis(),
+      groupBy: jest.fn().mockReturnThis(),
       select: jest.fn().mockReturnThis(),
       getRawMany: jest.fn(),
     };
@@ -78,7 +79,9 @@ describe('GamesService', () => {
       const qb: any = repositoryMock.createQueryBuilder!();
       qb.getRawMany.mockResolvedValue([]);
 
-      await expect(service.findOne(999)).rejects.toThrow('Game with ID 999 not found');
+      await expect(service.findOne(999)).rejects.toThrow(
+        'Game with ID 999 not found',
+      );
     });
 
     it('should return game details and calculate player stats correctly', async () => {
@@ -119,7 +122,7 @@ describe('GamesService', () => {
           throw_id: 4,
           score: 20,
           modifier: 3, // Round 2 start (score 60)
-        }
+        },
       ]);
 
       const result = await service.findOne(1);
@@ -127,14 +130,36 @@ describe('GamesService', () => {
       expect(result.id).toEqual(1);
       expect(result.type).toEqual('501');
       expect(result.players).toHaveLength(1);
-      
+
       const alice = result.players[0] as any;
       expect(alice.id).toEqual('p1');
       expect(alice.name).toEqual('Alice');
       expect(alice.missCount).toEqual(1);
-      
+
       // Calculate average: Round 1 = 80, Round 2 = 60. Sum = 140. Rounds = 2. Avg = 70.
       expect(alice.averageScorePerRound).toEqual(70);
+    });
+  });
+
+  describe('getPopularity', () => {
+    it('should return popularity statistics', async () => {
+      const qb: any = repositoryMock.createQueryBuilder!();
+      qb.getRawMany.mockResolvedValue([
+        { type: '501', count: 10 },
+        { type: 'cricket', count: 5 },
+      ]);
+
+      const result = await service.getPopularity();
+
+      expect(result).toEqual([
+        { type: '501', count: 10 },
+        { type: 'cricket', count: 5 },
+      ]);
+      expect(qb.select).toHaveBeenCalledWith([
+        'game.type AS type',
+        'COUNT(game.id) AS count',
+      ]);
+      expect(qb.groupBy).toHaveBeenCalledWith('game.type');
     });
   });
 });

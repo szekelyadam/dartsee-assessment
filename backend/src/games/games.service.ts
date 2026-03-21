@@ -23,6 +23,19 @@ export class GamesService {
     return this.gamesRepository.find();
   }
 
+  async getPopularity() {
+    const rawData = await this.gamesRepository
+      .createQueryBuilder('game')
+      .select(['game.type AS type', 'COUNT(game.id) AS count'])
+      .groupBy('game.type')
+      .getRawMany();
+
+    return rawData.map((row) => ({
+      type: row.type,
+      count: Number(row.count),
+    }));
+  }
+
   async findOne(id: number) {
     const rawData = await this.gamesRepository
       .createQueryBuilder('game')
