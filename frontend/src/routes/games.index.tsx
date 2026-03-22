@@ -4,8 +4,9 @@ import { GameSummaryCard } from "../components/GameSummaryCard";
 import { getLabelThemeClasses } from "../helpers";
 import { useQuery } from "@tanstack/react-query";
 import type { GameLog } from "../types";
+import { useMemo } from "react";
 
-export const Route = createFileRoute("/games")({
+export const Route = createFileRoute("/games/")({
   component: Games,
 });
 
@@ -16,7 +17,10 @@ function Games() {
       fetch(`${import.meta.env.VITE_API_URL}/games`).then((res) => res.json()),
   });
 
-  const uniqueGameTypes = Array.from(new Set(data?.map((game) => game.type)));
+  const uniqueGameTypes = useMemo(
+    () => data && Array.from(new Set(data.map((game) => game.type))),
+    [data],
+  );
 
   return (
     <>
@@ -32,7 +36,10 @@ function Games() {
             <GameSummaryCard
               key={game.id}
               game={game}
-              theme={getLabelThemeClasses(uniqueGameTypes.indexOf(game.type))}
+              theme={
+                uniqueGameTypes &&
+                getLabelThemeClasses(uniqueGameTypes.indexOf(game.type))
+              }
             />
           ))}
       </div>

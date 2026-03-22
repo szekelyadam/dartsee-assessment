@@ -136,7 +136,7 @@ export class GamesService {
       }
 
       const averageScorePerRound =
-        roundsCount > 0 ? roundsSum / roundsCount : 0;
+        roundsCount > 0 ? Math.round((roundsSum / roundsCount) * 100) / 100 : 0;
 
       return {
         ...player,
