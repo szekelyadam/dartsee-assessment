@@ -9,50 +9,50 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as GameLogsRouteImport } from './routes/game-logs'
+import { Route as GamesRouteImport } from './routes/games'
 
-const GameLogsRoute = GameLogsRouteImport.update({
-  id: '/game-logs',
-  path: '/game-logs',
+const GamesRoute = GamesRouteImport.update({
+  id: '/games',
+  path: '/games',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/game-logs': typeof GameLogsRoute
+  '/games': typeof GamesRoute
 }
 export interface FileRoutesByTo {
-  '/game-logs': typeof GameLogsRoute
+  '/games': typeof GamesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/game-logs': typeof GameLogsRoute
+  '/games': typeof GamesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/game-logs'
+  fullPaths: '/games'
   fileRoutesByTo: FileRoutesByTo
-  to: '/game-logs'
-  id: '__root__' | '/game-logs'
+  to: '/games'
+  id: '__root__' | '/games'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  GameLogsRoute: typeof GameLogsRoute
+  GamesRoute: typeof GamesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/game-logs': {
-      id: '/game-logs'
-      path: '/game-logs'
-      fullPath: '/game-logs'
-      preLoaderRoute: typeof GameLogsRouteImport
+    '/games': {
+      id: '/games'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof GamesRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  GameLogsRoute: GameLogsRoute,
+  GamesRoute: GamesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

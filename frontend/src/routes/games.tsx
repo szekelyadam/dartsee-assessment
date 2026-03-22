@@ -5,11 +5,11 @@ import { getLabelThemeClasses } from "../helpers";
 import { useQuery } from "@tanstack/react-query";
 import type { GameLog } from "../types";
 
-export const Route = createFileRoute("/game-logs")({
-  component: GameLogs,
+export const Route = createFileRoute("/games")({
+  component: Games,
 });
 
-function GameLogs() {
+function Games() {
   const { data, isPending, error } = useQuery<GameLog[]>({
     queryKey: ["games"],
     queryFn: () =>
