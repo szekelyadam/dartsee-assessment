@@ -1,5 +1,5 @@
-import { getInitials, getRandomPlayerColor } from "../helpers";
 import type { PlayerPerformance } from "../types";
+import { PlayerInitialsAvatar } from "./PlayerInitialsAvatar";
 
 export const PlayerPerformanceCard = ({
   player,
@@ -14,11 +14,7 @@ export const PlayerPerformanceCard = ({
             {player.name}
           </h2>
         </div>
-        <div
-          className={`w-12 h-12 rounded-full border-2 border-white flex items-center justify-center text-[16px] font-bold ${getRandomPlayerColor()}`}
-        >
-          {getInitials(player.name)}
-        </div>
+        <PlayerInitialsAvatar name={player.name} size="lg" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-surface-container-low p-4 rounded-lg">

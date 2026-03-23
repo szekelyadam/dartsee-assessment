@@ -4,10 +4,10 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { getInitials, getRandomPlayerColor } from "../helpers";
 import type { PlayerStat } from "../types";
 import { PAGINATION_PAGE_SIZE } from "../consts";
 import { useState } from "react";
+import { PlayerInitialsAvatar } from "./PlayerInitialsAvatar";
 
 const columns = [
   {
@@ -15,11 +15,7 @@ const columns = [
     header: "Player Name",
     cell: ({ row }: any) => (
       <div className="flex items-center gap-4">
-        <div
-          className={`w-12 h-12 rounded-full border-2 border-white flex items-center justify-center text-[16px] font-bold ${getRandomPlayerColor()}`}
-        >
-          {getInitials(row.original.name)}
-        </div>
+        <PlayerInitialsAvatar name={row.original.name} size="lg" />
         <span className="text-on-surface font-semibold">
           {row.original.name}
         </span>

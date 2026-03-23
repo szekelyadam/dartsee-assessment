@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { getInitials, getRandomPlayerColor } from "../helpers.ts";
 import type { GameLog } from "../types.ts";
+import { PlayerInitialsAvatar } from "./PlayerInitialsAvatar.tsx";
 
 export const GameSummaryCard = ({
   game,
@@ -37,12 +37,11 @@ export const GameSummaryCard = ({
             </span>
             <div className="flex -space-x-2">
               {game.players.map((player, index) => (
-                <div
+                <PlayerInitialsAvatar
+                  name={player.name}
+                  size="sm"
                   key={index}
-                  className={`w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold ${getRandomPlayerColor()}`}
-                >
-                  {getInitials(player.name)}
-                </div>
+                />
               ))}
             </div>
             <span className="text-xs font-semibold text-on-surface-variant">
