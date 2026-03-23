@@ -53,7 +53,10 @@ describe('GamesController', () => {
 
   describe('getPopularity', () => {
     it('should return game types and counts', async () => {
-      const result = [{ type: '501', count: 10 }];
+      const result = {
+        totalGames: 10,
+        games: [{ type: '501', count: 10, percentage: 100 }],
+      };
       mockGamesService.getPopularity.mockResolvedValue(result);
 
       expect(await controller.getPopularity()).toEqual(result);

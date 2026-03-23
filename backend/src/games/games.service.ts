@@ -62,10 +62,22 @@ export class GamesService {
       .groupBy('game.type')
       .getRawMany();
 
-    return rawData.map((row) => ({
+    const parsedData = rawData.map((row) => ({
       type: row.type,
       count: Number(row.count),
     }));
+
+    const totalGames = parsedData.reduce((sum, item) => sum + item.count, 0);
+
+    const games = parsedData.map((item) => ({
+      ...item,
+      percentage: totalGames > 0 ? (item.count / totalGames) * 100 : 0,
+    }));
+
+    return {
+      totalGames,
+      games: games.sort((a, b) => b.count - a.count),
+    };
   }
 
   async findOne(id: number) {

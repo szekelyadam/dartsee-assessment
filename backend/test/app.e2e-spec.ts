@@ -37,11 +37,13 @@ describe('AppController (e2e)', () => {
       .get('/games/popularity')
       .expect(200)
       .expect((res) => {
-        expect(Array.isArray(res.body)).toBe(true);
-        if (res.body.length > 0) {
-          expect(res.body[0]).toHaveProperty('type');
-          expect(res.body[0]).toHaveProperty('count');
-          expect(typeof res.body[0].count).toBe('number');
+        expect(res.body).toHaveProperty('totalGames');
+        expect(Array.isArray(res.body.games)).toBe(true);
+        if (res.body.games.length > 0) {
+          expect(res.body.games[0]).toHaveProperty('type');
+          expect(res.body.games[0]).toHaveProperty('count');
+          expect(res.body.games[0]).toHaveProperty('percentage');
+          expect(typeof res.body.games[0].count).toBe('number');
         }
       });
   });

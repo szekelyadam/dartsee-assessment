@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as GamesIndexRouteImport } from './routes/games.index'
 import { Route as GamesGameIdRouteImport } from './routes/games.$gameId'
 
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GamesIndexRoute = GamesIndexRouteImport.update({
   id: '/games/',
   path: '/games/',
@@ -24,33 +30,44 @@ const GamesGameIdRoute = GamesGameIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/analytics': typeof AnalyticsRoute
   '/games/$gameId': typeof GamesGameIdRoute
   '/games/': typeof GamesIndexRoute
 }
 export interface FileRoutesByTo {
+  '/analytics': typeof AnalyticsRoute
   '/games/$gameId': typeof GamesGameIdRoute
   '/games': typeof GamesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/analytics': typeof AnalyticsRoute
   '/games/$gameId': typeof GamesGameIdRoute
   '/games/': typeof GamesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/games/$gameId' | '/games/'
+  fullPaths: '/analytics' | '/games/$gameId' | '/games/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/games/$gameId' | '/games'
-  id: '__root__' | '/games/$gameId' | '/games/'
+  to: '/analytics' | '/games/$gameId' | '/games'
+  id: '__root__' | '/analytics' | '/games/$gameId' | '/games/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AnalyticsRoute: typeof AnalyticsRoute
   GamesGameIdRoute: typeof GamesGameIdRoute
   GamesIndexRoute: typeof GamesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/games/': {
       id: '/games/'
       path: '/games'
@@ -69,6 +86,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  AnalyticsRoute: AnalyticsRoute,
   GamesGameIdRoute: GamesGameIdRoute,
   GamesIndexRoute: GamesIndexRoute,
 }

@@ -6,7 +6,9 @@ const RootLayout = () => (
   <>
     <Header />
     <main className="pt-24 pb-12 px-6 md:px-12">
-      <Outlet />
+      <div className="flex-1 px-6 py-10 pb-32 md:px-12 md:pb-20">
+        <Outlet />
+      </div>
     </main>
     <TanStackRouterDevtools />
   </>

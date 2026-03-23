@@ -173,10 +173,13 @@ describe('GamesService', () => {
 
       const result = await service.getPopularity();
 
-      expect(result).toEqual([
-        { type: '501', count: 10 },
-        { type: 'cricket', count: 5 },
-      ]);
+      expect(result).toEqual({
+        totalGames: 15,
+        games: [
+          { type: '501', count: 10, percentage: (10 / 15) * 100 },
+          { type: 'cricket', count: 5, percentage: (5 / 15) * 100 },
+        ],
+      });
       expect(qb.select).toHaveBeenCalledWith([
         'game.type AS type',
         'COUNT(game.id) AS count',
