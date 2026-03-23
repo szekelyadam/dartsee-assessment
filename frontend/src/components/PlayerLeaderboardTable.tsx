@@ -1,10 +1,13 @@
 import {
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { getInitials, getRandomPlayerColor } from "../helpers";
 import type { PlayerStat } from "../types";
+import { PAGINATION_PAGE_SIZE } from "../consts";
+import { useState } from "react";
 
 const columns = [
   {
@@ -43,10 +46,19 @@ const columns = [
 ];
 
 export const PlayerLeaderboardTable = ({ data }: { data: PlayerStat[] }) => {
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: PAGINATION_PAGE_SIZE,
+  });
   const table = useReactTable({
     data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+    state: {
+      pagination,
+    },
   });
 
   return (
@@ -89,6 +101,41 @@ export const PlayerLeaderboardTable = ({ data }: { data: PlayerStat[] }) => {
           ))}
         </tbody>
       </table>
+      <div className="bg-surface-container-low/30 flex items-center justify-between px-8 py-4">
+        <span className="text-on-surface-variant text-sm">
+          Showing {table.getState().pagination.pageIndex + 1} to{" "}
+          {table.getState().pagination.pageIndex + PAGINATION_PAGE_SIZE} of{" "}
+          {data.length} players
+        </span>
+        <div className="flex gap-2">
+          <button
+            className="bg-surface-container-high text-on-surface hover:bg-surface-container-highest rounded-lg px-4 py-2 text-sm font-semibold transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => {
+              table.previousPage();
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
+            }}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </button>
+          <button
+            className="bg-primary text-on-primary shadow-primary/10 rounded-lg px-4 py-2 text-sm font-semibold shadow-md transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => {
+              table.nextPage();
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
+            }}
+            disabled={!table.getCanNextPage()}
+          >
+            Next Page
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

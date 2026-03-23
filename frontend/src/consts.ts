@@ -10,3 +10,5 @@ export const CHART_COLORS = [
   "#4A48B8",
   "#363491",
 ];
+
+export const PAGINATION_PAGE_SIZE = 10;

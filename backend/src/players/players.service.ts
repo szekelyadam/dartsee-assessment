@@ -26,6 +26,7 @@ export class PlayersService {
         'SUM(COALESCE(t.score, 0) * COALESCE(t.modifier, 0)) AS "totalScore"',
       ])
       .groupBy('p.id')
+      .having('gamesPlayed > 5')
       .getRawMany();
 
     return rawData
