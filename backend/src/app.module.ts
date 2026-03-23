@@ -8,6 +8,7 @@ import { GamePlayer } from './game-players/game-player.entity';
 import { Throw } from './throws/throw.entity';
 import { GamesModule } from './games/games.module';
 import * as path from 'path';
+import { PlayersModule } from './players/players.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import * as path from 'path';
       synchronize: false,
     }),
     GamesModule,
+    PlayersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
