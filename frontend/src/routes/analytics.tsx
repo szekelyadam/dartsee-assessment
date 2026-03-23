@@ -4,6 +4,7 @@ import type { GameStatsRender } from "../types";
 import { GameDistributionSection } from "../components/GameDistributionSection";
 import { CHART_COLORS } from "../consts";
 import { Hero } from "../components/Hero";
+import { LoadingIndicator } from "../components/LoadingIndicator";
 
 export const Route = createFileRoute("/analytics")({
   component: Analytics,
@@ -32,7 +33,6 @@ function Analytics() {
     },
   });
 
-  if (isPending) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -42,10 +42,13 @@ function Analytics() {
         title="Game Popularity"
         description="Explore the global distribution of game variants across all recorded matches. Gain high-level insights into the most widely played game types on the platform."
       />
-
-      <div className="flex flex-col items-center">
-        <GameDistributionSection data={data} />
-      </div>
+      {isPending ? (
+        <LoadingIndicator />
+      ) : (
+        <div className="flex flex-col items-center">
+          <GameDistributionSection data={data} />
+        </div>
+      )}
     </>
   );
 }

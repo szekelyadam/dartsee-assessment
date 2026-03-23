@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PlayerPerformanceCard } from "../components/PlayerPerformanceCard";
 import type { GameDetails } from "../types";
 import { Hero } from "../components/Hero";
+import { LoadingIndicator } from "../components/LoadingIndicator";
 
 export const Route = createFileRoute("/games/$gameId")({
   component: GameDetails,
@@ -18,7 +19,7 @@ function GameDetails() {
       ),
   });
 
-  if (isPending) return <div>Loading...</div>;
+  if (isPending) return <LoadingIndicator />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (

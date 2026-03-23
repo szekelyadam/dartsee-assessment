@@ -5,6 +5,7 @@ import { getLabelThemeClasses } from "../helpers";
 import { useQuery } from "@tanstack/react-query";
 import type { GameLog } from "../types";
 import { useMemo } from "react";
+import { LoadingIndicator } from "../components/LoadingIndicator";
 
 export const Route = createFileRoute("/games/")({
   component: Games,
@@ -28,21 +29,24 @@ function Games() {
         title="Game History"
         description="Browse and analyze the complete archive of recorded matches, game types, and key player statistics."
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {isPending && <div>Loading...</div>}
-        {error && <div>Error: {error.message}</div>}
-        {data &&
-          data.map((game) => (
-            <GameSummaryCard
-              key={game.id}
-              game={game}
-              theme={
-                uniqueGameTypes &&
-                getLabelThemeClasses(uniqueGameTypes.indexOf(game.type))
-              }
-            />
-          ))}
-      </div>
+      {isPending ? (
+        <LoadingIndicator />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {error && <div>Error: {error.message}</div>}
+          {data &&
+            data.map((game) => (
+              <GameSummaryCard
+                key={game.id}
+                game={game}
+                theme={
+                  uniqueGameTypes &&
+                  getLabelThemeClasses(uniqueGameTypes.indexOf(game.type))
+                }
+              />
+            ))}
+        </div>
+      )}
     </>
   );
 }
