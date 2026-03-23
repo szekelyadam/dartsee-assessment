@@ -38,3 +38,11 @@ export type GameStatsRender = Omit<GameStatsResponse, "games"> & {
     fill: string;
   })[];
 };
+
+export type PlayerStat = {
+  id: string;
+  name: string;
+  gamesPlayed: number;
+  averageScorePerRound: number;
+  missesPerGame: number;
+};
