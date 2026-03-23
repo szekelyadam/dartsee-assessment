@@ -49,6 +49,15 @@ describe('GamesController', () => {
       expect(await controller.findOne(1)).toEqual(result);
       expect(service.findOne).toHaveBeenCalledWith(1);
     });
+
+    it('should forward the id as a number to the service', async () => {
+      const spy = jest.spyOn(service, 'findOne').mockResolvedValue({ id: 42, type: 'cricket', players: [] } as any);
+
+      await controller.findOne(42);
+
+      expect(spy).toHaveBeenCalledWith(42);
+      expect(typeof spy.mock.lastCall?.[0]).toBe('number');
+    });
   });
 
   describe('getPopularity', () => {

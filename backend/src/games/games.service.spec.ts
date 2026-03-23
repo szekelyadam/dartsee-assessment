@@ -94,6 +94,20 @@ describe('GamesService', () => {
         },
       ]);
     });
+
+    it('should deduplicate the same player appearing in multiple raw rows', async () => {
+      const qb: any = repositoryMock.createQueryBuilder!();
+      qb.getRawMany.mockResolvedValue([
+        { game_id: 1, game_type: 'Test Game', player_id: 'p1', player_name: 'Alice' },
+        // Alice appears again due to a join duplication — should only appear once
+        { game_id: 1, game_type: 'Test Game', player_id: 'p1', player_name: 'Alice' },
+        { game_id: 1, game_type: 'Test Game', player_id: 'p2', player_name: 'Bob' },
+      ]);
+
+      const result = (await service.findAll()) as any[];
+      expect(result[0].players).toHaveLength(2);
+      expect(result[0].players.map((p: any) => p.id)).toEqual(['p1', 'p2']);
+    });
   });
 
   describe('findOne', () => {
@@ -160,6 +174,28 @@ describe('GamesService', () => {
 
       // Calculate average: Round 1 = 80, Round 2 = 60. Sum = 140. Rounds = 2. Avg = 70.
       expect(alice.averageScorePerRound).toEqual(70);
+    });
+
+    it('should return zero stats for a player with no throws', async () => {
+      const qb: any = repositoryMock.createQueryBuilder!();
+      qb.getRawMany.mockResolvedValue([
+        {
+          game_id: 1,
+          game_type: '501',
+          player_id: 'p2',
+          player_name: 'Bob',
+          throw_id: null,
+          score: null,
+          modifier: null,
+        },
+      ]);
+
+      const result = await service.findOne(1);
+
+      expect(result.players).toHaveLength(1);
+      const bob = result.players[0] as any;
+      expect(bob.missCount).toEqual(0);
+      expect(bob.averageScorePerRound).toEqual(0);
     });
   });
 

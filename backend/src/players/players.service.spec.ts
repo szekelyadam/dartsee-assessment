@@ -16,6 +16,7 @@ export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
       orderBy: jest.fn().mockReturnThis(),
       groupBy: jest.fn().mockReturnThis(),
       addGroupBy: jest.fn().mockReturnThis(),
+      having: jest.fn().mockReturnThis(),
       select: jest.fn().mockReturnThis(),
       getRawMany: jest.fn(),
     };
@@ -120,6 +121,33 @@ describe('PlayersService', () => {
           missesPerGame: 0,
         },
       ]);
+    });
+
+    it('should sort players by averageScorePerRound descending even if raw data is unordered', async () => {
+      const qb: any = repositoryMock.createQueryBuilder!();
+      qb.getRawMany.mockResolvedValue([
+        // Bob appears first in raw data but has a lower average
+        { id: 'p2', name: 'Bob', gamesPlayed: '1', totalThrows: '3', totalMisses: '0', totalScore: '30' },
+        { id: 'p1', name: 'Alice', gamesPlayed: '1', totalThrows: '3', totalMisses: '0', totalScore: '90' },
+      ]);
+
+      const result = await service.getLeaderboard();
+
+      expect(result[0].name).toBe('Alice');
+      expect(result[1].name).toBe('Bob');
+    });
+
+    it('should round averageScorePerRound to 2 decimal places', async () => {
+      const qb: any = repositoryMock.createQueryBuilder!();
+      // (100 / 3) * 3 = 100 exactly, let's use a value that produces a decimal
+      // totalScore=100, totalThrows=9 -> (100/9)*3 = 33.333...
+      qb.getRawMany.mockResolvedValue([
+        { id: 'p1', name: 'Alice', gamesPlayed: '1', totalThrows: '9', totalMisses: '0', totalScore: '100' },
+      ]);
+
+      const result = await service.getLeaderboard();
+
+      expect(result[0].averageScorePerRound).toBe(33.33);
     });
   });
 });
