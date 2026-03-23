@@ -18,6 +18,14 @@ The REST API exposes the following primary routing endpoints:
   - **`averageScorePerRound`**: Calculates the average sum score mathematically by grouping every 3 chronologically subsequent darts into a single "round".
   - **`missCount`**: Tracks how many times a player missed the board completely (distinguished mechanically by a throw `modifier` of `0`).
 
+- **`GET /players/leaderboard`**
+  Retrieves calculated performance metrics for all players.
+  - **`averageScorePerRound`**: Global average score calculated across all rounds.
+  - **`gamesPlayed`**: Total number of games the player participated in.
+  - **`missesPerGame`**: Average number of complete misses (modifier 0) per game.
+  - **Filtering**: Only includes players with **more than 5 games played** to ensure statistical relevance.
+  - **Sorting**: Returns players sorted by `averageScorePerRound` in descending order.
+
 ## Tech Stack
 
 - **[NestJS](https://nestjs.com/)** - The primary progressive Node.js framework used for structuring the API server.
@@ -49,16 +57,17 @@ $ npm run start:prod
 
 ## Testing
 
-The backend includes comprehensive Unit and End-to-End (e2e) tests to ensure data manipulation queries and algorithmic calculation standards remain intact across updates.
+The backend includes comprehensive Unit and End-to-End (E2E) tests to ensure data manipulation queries and algorithmic calculation standards remain intact across updates.
+
+| Test Type      | Scope                                            | Test Count |
+| -------------- | ------------------------------------------------ | ---------- |
+| **Unit Tests** | Controllers, Services, Algorithms, QueryBuilders | 20         |
+| **E2E Tests**  | Authentic HTTP endpoints & Routing               | 10         |
 
 ```bash
-# Run native unit tests (tests Controllers, Services, algorithms, and QueryBuilder outputs)
+# Run native unit tests
 $ npm run test
 
-# Run active E2E tests (tests authentic HTTP endpoints testing the API router layers)
+# Run active E2E tests
 $ npm run test:e2e
 ```
-
-## License
-
-NestJS related templating is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
