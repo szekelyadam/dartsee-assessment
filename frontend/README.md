@@ -12,7 +12,7 @@ This is the frontend user interface for the Dartsee assessment, built using [Rea
 - **🏆 Player Leaderboard**
   - Comprehensive performance tracking across all historical games.
   - Metrics include: `Average Score Per Round`, `Total Games Played`, and `Misses Per Game`.
-  - **Pagination** and **Sorting** powered by `@tanstack/react-table`.
+  - **Pagination** powered by `@tanstack/react-table`.
   - Automatic filtering for statistical significance (players with >5 games).
 
 - **📂 Game History & Details**
